@@ -7,7 +7,7 @@
      So if 3 points are:
      Point1: (x1, y1, z1)            Point2: (x2, y2, z2)           Point3: (x3, y3, z3)
 
-     What is the coordinate of Line Startpoint and Endpoint?
+     What are the coordinates of Line Startpoint and Endpoint?
      Startpoint: (x1, y1, z3)              Endpoint: (x2, y2, z3)
 
      You need to write a little bit of code in this tutorial.
@@ -48,7 +48,7 @@ namespace Tutorial_4
                                                                       //Use editor.GetPoint() to get the result, and use ppo_1 above as the parameter.
                                                                       //Now we establish a relationship between ppr_1 and ppo_1. So ppr_1 stores the input result of ppo_1.
 
-
+            
             //Do exactly same for Point2 and Point3
 
             PromptPointOptions ppo_2 = new PromptPointOptions("\nPlease pick Point 2:");
