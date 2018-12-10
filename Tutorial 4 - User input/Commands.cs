@@ -40,13 +40,13 @@ namespace Tutorial_4
 
             //PromptOption need to be used when you want to take user input. Because we are taking point inputs, we need to use PromptPointOptions. 
             //PromptPointOptions has a constructor which needs a string (a sentence), this string is the message user will see in Civil3D prompts.
-            //The \n at begining means "Start a new line". It works exactly same as press Enter in Word.
+            //The \n at begining means "Start a new line". It works exactly same as press Enter in Notepad.
 
             PromptPointOptions ppo_1 = new PromptPointOptions("\nPlease pick Point 1:");
 
             PromptPointResult ppr_1 = editor.GetPoint(ppo_1);         //PromptPointResult is used to store user input. 
                                                                       //Use editor.GetPoint() to get the result, and use ppo_1 above as the parameter.
-                                                                      //Now we establish a relationship between ppr_1 and ppo_1. So ppr_1 stores the input result of ppo_1.
+                                                                      //Now we have established a relationship between ppr_1 and ppo_1. So ppr_1 stores the input result of ppo_1.
 
             
             //Do exactly same for Point2 and Point3
@@ -59,28 +59,29 @@ namespace Tutorial_4
 
 
 
-            //Now we have 3 user input of points which stored in ppr_1, ppr_2 and ppr_3.
-            //Why this part is outside transaction? Because we didn't touch anything in database, we just take user inputs (basically the cursor position when clicking).
-
+            //Now we have 3 user input of points which are stored in ppr_1, ppr_2 and ppr_3.
+            //Why this part is outside transaction? Because we didn't touch anything in database, we are just taking user inputs (basically the cursor position when clicking).
+            //It is ok to put part above in the transaction too.
 
             using (Transaction trans = HostApplicationServices.WorkingDatabase.TransactionManager.StartOpenCloseTransaction())
             {
                 BlockTable blockTab = trans.GetObject(currentDB.BlockTableId, OpenMode.ForRead) as BlockTable;
                 BlockTableRecord modelSpaceBTR = trans.GetObject(blockTab[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
 
-                //ppr.Status shows the user's action. OK means user follows the rules and picked a point successfully.
-                //User might press ESC at any time, in that case, ppr won't have any value in it. Program will throw an exception if you try to access ppr values.
-                //So we must check the Status before accessing ppr values.
+
 
                 if (ppr_1.Status == PromptStatus.OK && ppr_2.Status == PromptStatus.OK && ppr_3.Status == PromptStatus.OK)
                 {
+                                                          //ppr.Status shows the user's action. OK means user follows the rules and picked a point successfully.
+                                                          //User might press ESC at any time, in that case, ppr won't have any value in it. Program will throw an exception if you try to access ppr values.
+                                                          //So we must check the Status before accessing ppr values.
 
-                                                        //Now we have ppr_1, ppr_2 and ppr_3, but how to access the coordinatas of points?
-                                                        //If you type ppr_1 and a dot ( ppr_1. ), you will see there is a ppr_1.Value, which is an instance of Point3d.
-                                                        //So now you should realise those clicks from user are stored as a Point3d type.
+                                                          //Now we have ppr_1, ppr_2 and ppr_3, but how to access the coordinates of them?
+                                                          //If you type ppr_1 and a dot ( ppr_1. ), you will see there is a ppr_1.Value, which is an instance of Point3d.
+                                                          //So now you should realise those clicks from user are stored as a Point3d type.
 
 
-                    Point3d pt_1 = ppr_1.Value;          //Think: why we don't use  Point3d pt1 = new Point3d(ppr_1.Value)  as in Tutorial 3? 
+                    Point3d pt_1 = ppr_1.Value;          //Think: why we don't use  Point3d pt1 = new Point3d(ppr_1.Value) as in Tutorial 3? 
                     Point3d pt_2 = ppr_2.Value;          //Because ppr_1.Value is already an instance of Point3d, we don't need to declare another space in RAM to store it.
                     Point3d pt_3 = ppr_3.Value;          //So we don't even need to use these 3 lines of codes. What these do is just adding another "Name" or "Label" to those values. 
 
